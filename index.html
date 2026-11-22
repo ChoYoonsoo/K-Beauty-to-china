@@ -1,0 +1,1507 @@
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>K-Beauty 美妆日预约与问卷</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fdf7f9;
+  --card:#ffffff;
+  --text:#2a2024;
+  --muted:#7a6a70;
+  --pri:#e8557a;
+  --pri-d:#c93f63;
+  --line:#f1dde3;
+  --soft:#fde9ef;
+  --warn:#fff4d6;
+  --warn-t:#6b5200;
+  --ok:#e8f7ee;
+  --ok-t:#1b6b3a;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1b1417;
+    --card:#261c20;
+    --text:#f6eaee;
+    --muted:#b9a5ac;
+    --pri:#f06b8e;
+    --pri-d:#ff89a7;
+    --line:#3a2b31;
+    --soft:#35212a;
+    --warn:#3d3318;
+    --warn-t:#f0d98a;
+    --ok:#163322;
+    --ok-t:#7ce0a2;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1b1417;
+  --card:#261c20;
+  --text:#f6eaee;
+  --muted:#b9a5ac;
+  --pri:#f06b8e;
+  --pri-d:#ff89a7;
+  --line:#3a2b31;
+  --soft:#35212a;
+  --warn:#3d3318;
+  --warn-t:#f0d98a;
+  --ok:#163322;
+  --ok-t:#7ce0a2;
+}
+html{
+  scroll-padding-top:env(safe-area-inset-top,0px);
+  scroll-behavior:smooth;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Noto Sans SC","Noto Sans KR","PingFang SC","Microsoft YaHei",sans-serif;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 20px;
+  border-bottom:1px solid var(--line);
+  background:var(--card);
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+.logo{font-weight:700;font-size:18px;color:var(--pri)}
+.hdr-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.lang{font-size:13px;color:var(--muted)}
+.theme-btn{
+  border:1px solid var(--line);
+  background:var(--bg);
+  color:var(--text);
+  border-radius:999px;
+  padding:5px 11px;
+  font:inherit;
+  font-size:12px;
+  cursor:pointer;
+}
+.theme-btn:hover{background:var(--soft)}
+.hero{
+  text-align:center;
+  padding:44px 20px 34px;
+  background:var(--soft);
+  border-top:6px solid var(--pri);
+}
+.hero h1{margin:0 0 10px;font-size:clamp(24px,4vw,32px);line-height:1.3}
+.hero p{margin:0 auto 22px;color:var(--muted);max-width:580px;font-size:15px}
+.btn{
+  display:inline-block;
+  background:var(--pri);
+  color:#fff;
+  border:0;
+  border-radius:10px;
+  padding:12px 24px;
+  font:inherit;
+  font-weight:500;
+  cursor:pointer;
+  text-decoration:none;
+  transition:background .15s ease,transform .1s ease;
+}
+.btn:hover{background:var(--pri-d)}
+.btn:active{transform:scale(0.99)}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--soft)}
+.mini{
+  border:1px solid var(--line);
+  background:var(--bg);
+  color:var(--text);
+  border-radius:8px;
+  padding:6px 11px;
+  font:inherit;
+  font-size:12px;
+  cursor:pointer;
+}
+.mini:hover{background:var(--soft)}
+main{max-width:960px;margin:0 auto;padding:28px 20px 64px}
+h2{font-size:21px;margin:0 0 6px}
+h3.sec{font-size:16px;margin:18px 0 8px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 16px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+  gap:16px;
+  margin-bottom:40px;
+}
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+}
+.card.pk{border:2px solid var(--pri)}
+.tag{
+  display:inline-block;
+  font-size:12px;
+  background:var(--soft);
+  color:var(--pri);
+  border-radius:6px;
+  padding:2px 8px;
+  margin-right:4px;
+  margin-bottom:4px;
+}
+.card h3{margin:8px 0 4px;font-size:17px}
+.card ul{margin:6px 0 16px;padding-left:18px;font-size:14px;color:var(--muted);flex:1}
+.card .btn{width:100%;text-align:center;padding:10px}
+.steps{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:14px;
+  margin-bottom:40px;
+}
+.step{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px;
+}
+.step b{
+  display:inline-flex;
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  background:var(--pri);
+  color:#fff;
+  align-items:center;
+  justify-content:center;
+  font-size:14px;
+  margin-bottom:6px;
+}
+.step p{margin:2px 0 0;font-size:14px;color:var(--muted)}
+/* 구글폼 스타일 질문 카드 박스 */
+.box{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-top:8px solid var(--pri);
+  border-radius:16px;
+  padding:24px;
+  margin-bottom:40px;
+  box-shadow:0 6px 24px rgba(232,85,122,0.06);
+}
+@media(max-width:560px){.box{padding:18px}}
+.prog{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+  font-size:13px;
+  color:var(--muted);
+}
+.prog span{
+  padding:4px 10px;
+  border-radius:12px;
+  background:var(--bg);
+  cursor:pointer;
+}
+.prog span.ok{background:var(--soft);color:var(--pri)}
+.prog span.on{background:var(--pri);color:#fff;font-weight:500}
+.sp{display:none}
+.q-card{
+  border:1px solid var(--line);
+  border-left:4px solid var(--pri);
+  border-radius:12px;
+  padding:16px;
+  margin-bottom:14px;
+  background:var(--bg);
+}
+.req{color:var(--pri);font-weight:700;margin-left:3px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.row{grid-template-columns:1fr}}
+label{display:block;font-size:14px;font-weight:500;margin-bottom:12px}
+input,select,textarea{
+  width:100%;
+  margin-top:6px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:var(--card);
+  color:var(--text);
+  font:inherit;
+}
+input[type=checkbox],input[type=radio]{width:auto;margin:0 8px 0 0}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--pri);outline-offset:-1px}
+.sgrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+  gap:10px;
+  margin-bottom:12px;
+}
+.sc{
+  text-align:left;
+  border:1px solid var(--line);
+  background:var(--card);
+  color:var(--text);
+  border-radius:12px;
+  padding:13px;
+  font:inherit;
+  cursor:pointer;
+  transition:border-color .15s ease,background .15s ease;
+}
+.sc:hover{border-color:var(--pri)}
+.sc.on{border:2px solid var(--pri);background:var(--soft)}
+.sc b{display:block;font-size:15px;margin-top:6px}
+.sc small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.custom-store-box{
+  margin-top:10px;
+  padding:12px;
+  border:1px dashed var(--pri);
+  border-radius:10px;
+  background:var(--card);
+}
+.custom-store-box label{margin-bottom:0;font-size:13px}
+.hint{color:var(--muted);font-size:13px;margin:0 0 8px}
+.notice{
+  background:var(--soft);
+  border-radius:10px;
+  padding:12px 14px;
+  font-size:14px;
+  margin-bottom:16px;
+}
+.notice.warn{background:var(--warn);color:var(--warn-t)}
+.tr-box{
+  margin-top:8px;
+  padding:10px 12px;
+  border-radius:10px;
+  background:var(--ok);
+  color:var(--ok-t);
+  font-size:13px;
+}
+.tr-box b{display:block;margin-bottom:3px}
+.chk{
+  display:flex;
+  align-items:flex-start;
+  font-weight:400;
+  font-size:13px;
+  color:var(--muted);
+  cursor:pointer;
+}
+.chk input{margin-top:3px}
+.cal{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:12px;
+  max-width:380px;
+  margin-bottom:12px;
+  background:var(--card);
+}
+.calhead{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:8px;
+}
+.nav{
+  border:1px solid var(--line);
+  background:var(--bg);
+  color:var(--text);
+  border-radius:8px;
+  width:36px;
+  height:36px;
+  font-size:18px;
+  cursor:pointer;
+}
+.nav:disabled{opacity:.35;cursor:default}
+.wk,.days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.wk span{font-size:12px;color:var(--muted);padding:4px 0}
+.dy{
+  border:0;
+  background:transparent;
+  color:var(--text);
+  border-radius:8px;
+  height:40px;
+  font:inherit;
+  font-size:14px;
+  cursor:pointer;
+  position:relative;
+}
+.dy:hover:not(:disabled){background:var(--soft)}
+.dy:disabled{color:var(--muted);opacity:.35;cursor:default}
+.dy.sel{background:var(--pri);color:#fff;font-weight:500}
+.picked{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.pi{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:var(--soft);
+  border-radius:8px;
+  padding:9px 12px;
+  font-size:14px;
+}
+.pi.empty{
+  background:transparent;
+  border:1px dashed var(--line);
+  color:var(--muted);
+}
+.pi button{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  cursor:pointer;
+  font-size:16px;
+  padding:2px 6px;
+}
+.tt{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:14px;
+  margin-bottom:16px;
+  background:var(--bg);
+}
+.tthead{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.ttb{display:flex;gap:6px;flex-wrap:wrap}
+.trow{
+  display:grid;
+  grid-template-columns:1fr 160px;
+  gap:12px;
+  align-items:center;
+}
+@media(max-width:560px){.trow{grid-template-columns:1fr}}
+.trow small{color:var(--muted);font-size:13px}
+.trow select{margin-top:0}
+.mv{
+  margin:10px 0;
+  padding:7px 10px;
+  background:var(--card);
+  border-radius:8px;
+  font-size:13px;
+  color:var(--muted);
+}
+.warnl{
+  margin:8px 0 0;
+  padding:8px 10px;
+  background:var(--warn);
+  color:var(--warn-t);
+  border-radius:8px;
+  font-size:13px;
+}
+.sumbox{
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:14px;
+  margin-bottom:16px;
+  font-size:14px;
+  background:var(--bg);
+}
+.sumbox div{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:5px 0;
+  border-bottom:1px dashed var(--line);
+}
+.sumbox div:last-child{border-bottom:0}
+.sumbox .tot{
+  border-top:1px solid var(--line);
+  margin-top:6px;
+  padding-top:8px;
+  font-weight:700;
+  font-size:16px;
+}
+.pm{
+  display:flex;
+  align-items:center;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:12px;
+  margin-bottom:8px;
+  font-weight:500;
+  cursor:pointer;
+  margin-top:0;
+  background:var(--bg);
+}
+.pm.on{border:2px solid var(--pri);background:var(--soft)}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+#done{text-align:center;padding:10px}
+#done h3{color:var(--pri);font-size:20px;margin-top:0}
+.code{
+  display:inline-block;
+  background:var(--soft);
+  border-radius:8px;
+  padding:4px 12px;
+  font-weight:700;
+  color:var(--pri);
+}
+.qr{
+  width:130px;
+  height:130px;
+  border:2px dashed var(--line);
+  border-radius:12px;
+  margin:14px auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  color:var(--muted);
+}
+.share-box{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:14px;
+  background:var(--bg);
+  text-align:left;
+  margin:14px 0;
+}
+.share-box small{display:block;color:var(--muted);margin-bottom:6px}
+.share-url{
+  width:100%;
+  padding:9px 10px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:var(--card);
+  color:var(--text);
+  font-size:12px;
+  margin-top:0;
+}
+details{border-bottom:1px solid var(--line);padding:12px 0}
+summary{cursor:pointer;font-weight:500}
+details p{margin:8px 0 0;color:var(--muted);font-size:14px}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:24px}
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">K-Beauty 美妆日预约</span>
+  <div class="hdr-right">
+    <span class="lang">简体中文 · 链接共享预览</span>
+    <button type="button" class="mini" id="topShareBtn">复制当前链接</button>
+    <button type="button" class="theme-btn" id="themeBtn" aria-label="切换主题">切换主题</button>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>一日完成的 K-Beauty 美妆日问卷与预约</h1>
+  <p>选择地区与套餐，填写各品类心仪门店与时间。风格说明会自动翻译为韩文，并可随时生成专属共享链接发送给他人查看。</p>
+  <a class="btn" href="#book">立即填写预约问卷</a>
+</section>
+
+<main>
+  <h2>预约流程</h2>
+  <p class="sub">当前为免后台收集的链接共享与填写预览模式，所选内容可编码进网址链接（#s=...）随时分享。</p>
+  <div class="steps">
+    <div class="step"><b>1</b><br><strong>地区·套餐·日期</strong><p>选择首尔区域（或不限）、美妆项目与首选日期。</p></div>
+    <div class="step"><b>2</b><br><strong>门店·时间安排</strong><p>选择或填写各品类门店名称，结合时长与路程安排时间。</p></div>
+    <div class="step"><b>3</b><br><strong>微信确认通知</strong><p>团队核实后24小时内通过微信回复确认或替代方案。</p></div>
+    <div class="step"><b>4</b><br><strong>到店体验</strong><p>出示预约确认信息即可开始体验。</p></div>
+  </div>
+
+  <h2>热门套餐</h2>
+  <p class="sub">最受欢迎的组合方案，具体价格尚未最终确定。</p>
+  <div class="grid" id="pkgs"></div>
+
+  <h2 id="book">预约申请问卷</h2>
+  <div class="box">
+    <div class="prog" id="prog"></div>
+    <div class="notice warn" id="err" style="display:none"></div>
+
+    <!-- Step 1: 地区选择 -->
+    <div class="sp" data-s="1">
+      <div class="q-card">
+        <h3 class="sec" style="margin-top:0">① 您希望在首尔哪个区域体验？<span class="req">*</span></h3>
+        <div class="sgrid" id="regs"></div>
+      </div>
+      <div class="btns"><button type="button" class="btn" data-go="2">下一步：选择套餐/项目</button></div>
+    </div>
+
+    <!-- Step 2: 套餐/项目选择 -->
+    <div class="sp" data-s="2">
+      <div class="q-card">
+        <h3 class="sec" style="margin-top:0">② 请选择您想要的套餐或单品<span class="req">*</span></h3>
+        <p class="sub">不同项目包含的美妆品类不同，预计时长为不含路程的平均参考值。</p>
+        <div id="prods"></div>
+      </div>
+      <div class="btns">
+        <button type="button" class="btn ghost" data-go="1">← 上一步</button>
+        <button type="button" class="btn" data-go="3">下一步：选择日期</button>
+      </div>
+    </div>
+
+    <!-- Step 3: 首选日期选择（仅1순위/首选1天） -->
+    <div class="sp" data-s="3">
+      <div class="q-card">
+        <h3 class="sec" style="margin-top:0">③ 请选择您的首选预约日期（仅选1天）<span class="req">*</span></h3>
+        <div class="notice">📌 点击日历中的一个日期即可设为您的<b>首选日期</b>，再次点击可取消。具体时间将在下一步设置。</div>
+        <div class="cal">
+          <div class="calhead">
+            <button type="button" class="nav" id="prev">‹</button>
+            <b id="ym"></b>
+            <button type="button" class="nav" id="next">›</button>
+          </div>
+          <div class="wk"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
+          <div class="days" id="days"></div>
+        </div>
+        <div class="picked" id="picked"></div>
+      </div>
+      <div class="btns">
+        <button type="button" class="btn ghost" data-go="2">← 上一步</button>
+        <button type="button" class="btn" data-go="4">下一步：选择/填写门店</button>
+      </div>
+    </div>
+
+    <!-- Step 4: 各品类门店选择 + 自定义门店名称填写 -->
+    <div class="sp" data-s="4">
+      <div class="q-card">
+        <h3 class="sec" style="margin-top:0">④ 请选择或填写各品类门店<span class="req">*</span></h3>
+        <p class="sub">每个品类对应不同门店。优先展示所选区域门店，并附带与上一家门店的参考路程；您也可以直接在下方填写心仪的门店名称。</p>
+        <div id="storeSteps"></div>
+      </div>
+      <div class="btns">
+        <button type="button" class="btn ghost" data-go="3">← 上一步</button>
+        <button type="button" class="btn" data-go="5">下一步：安排时间</button>
+      </div>
+    </div>
+
+    <!-- Step 5: 首选日期时间安排 -->
+    <div class="sp" data-s="5">
+      <div class="q-card">
+        <h3 class="sec" style="margin-top:0">⑤ 请安排首选日期的各品类时间<span class="req">*</span></h3>
+        <p class="sub">各品类门店不同，请按从上到下的顺序为每个项目选择开始时间，并留出<b>服务时长 + 路程时间</b>。若不确定可选择“时间不限”，由运营团队协调。</p>
+        <div id="tt"></div>
+      </div>
+      <div class="btns">
+        <button type="button" class="btn ghost" data-go="4">← 上一步</button>
+        <button type="button" class="btn" data-go="6">下一步：填写申请人信息</button>
+      </div>
+    </div>
+
+    <!-- Step 6: 申请人信息 + 风格需求自动翻译成韩语 -->
+    <div class="sp" data-s="6">
+      <div class="q-card">
+        <h3 class="sec" style="margin-top:0">⑥ 申请人信息与风格需求</h3>
+        <div class="notice">⚠️ 提交本问卷<b>不代表预约已直接确认</b>，需经门店核实并通过微信发送确认通知后方为完成。</div>
+        <div class="row">
+          <label>人数<span class="req">*</span><select id="ppl"><option value="1">1人</option><option value="2">2人</option><option value="3">3人</option><option value="4">4人</option></select></label>
+          <label>姓名<span class="req">*</span><input id="name" placeholder="例如：李梅 / Li Mei"></label>
+        </div>
+        <div class="row">
+          <label>微信号 (WeChat ID)<span class="req">*</span><input id="wechat" placeholder="请输入微信号"></label>
+          <label>电子邮箱<span class="req">*</span><input id="email" type="email" placeholder="example@email.com"></label>
+        </div>
+        <label>想要的风格/参考图说明（自动翻译为韩语保存）
+          <textarea id="memo" rows="3" placeholder="例如：喜欢清透自然的韩系妆容、锁骨发、证件照显气质，附参考明星或照片链接"></textarea>
+        </label>
+        <div class="tr-box" id="trBox">
+          <b>🇰🇷 自动韩语翻译预览（将同步保存至后台）</b>
+          <div id="memoKoPreview">尚未输入风格说明</div>
+        </div>
+        <label class="chk" style="margin-top:12px"><input type="checkbox" id="agree">我同意收集并使用个人信息（姓名、微信号、邮箱及预约信息，用于预约核实与门店沟通）。<span class="req">*</span></label>
+      </div>
+      <div class="btns">
+        <button type="button" class="btn ghost" data-go="5">← 上一步</button>
+        <button type="button" class="btn" data-go="7">下一步：支付确认</button>
+      </div>
+    </div>
+
+    <!-- Step 7: 支付确认（演示） -->
+    <div class="sp" data-s="7">
+      <div class="q-card">
+        <h3 class="sec" style="margin-top:0">⑦ 预约金支付确认（演示）</h3>
+        <div class="notice warn">🚧 <b>在线支付功能正在完善中。</b> 当前为演示页面，不会产生真实扣款。</div>
+        <div class="sumbox" id="paySum"></div>
+        <p class="sub" style="margin-bottom:8px"><b>支付方式</b></p>
+        <label class="pm on"><input type="radio" name="pm" value="WeChat Pay" checked>微信支付 (WeChat Pay)</label>
+        <label class="pm"><input type="radio" name="pm" value="Alipay">支付宝 (Alipay)</label>
+        <label class="pm"><input type="radio" name="pm" value="Card">信用卡/借记卡（支持海外卡）</label>
+        <label class="chk" style="margin-top:12px"><input type="checkbox" id="agree2">我已阅读并同意预约与退款相关说明（细则将在确认时告知）。<span class="req">*</span></label>
+      </div>
+      <div class="btns">
+        <button type="button" class="btn" id="payBtn">确认并提交预约</button>
+        <button type="button" class="btn ghost" id="skipPay">暂不支付，仅提交申请</button>
+        <button type="button" class="btn ghost" data-go="6">← 上一步</button>
+      </div>
+    </div>
+    <!-- Step 8: 提交完成与链接分享 -->
+    <div class="sp" data-s="8" id="done">
+      <h3 id="doneTitle">✓ 共享预览链接已生成</h3>
+      <p>分享编号 <span class="code" id="code"></span></p>
+      <div class="sumbox" id="doneSum" style="text-align:left"></div>
+      <div class="share-box">
+        <small>🔗 共享链接（打开此链接即可还原当前填写/选择的全部内容）：</small>
+        <input type="text" class="share-url" id="shareUrlInput" readonly>
+      </div>
+      <p id="doneNote" style="font-size:13px;color:var(--muted)"></p>
+      <p>无需服务器收集表单，直接将上方链接发给朋友或运营伙伴即可同步查看当前内容。</p>
+      <div class="qr">运营团队微信二维码<br>（准备中）</div>
+      <div class="btns" style="justify-content:center">
+        <button type="button" class="btn" id="copyShareBtn">复制共享链接</button>
+        <button type="button" class="btn ghost" id="copyBtn">复制预约摘要</button>
+        <button type="button" class="btn ghost" id="again">重新填写</button>
+      </div>
+    </div>
+  </div>
+
+  <h2>常见问题</h2>
+  <details><summary>打开共享链接后会看到什么？</summary><p>打开包含 #s=... 的链接后，页面会自动还原当时选择的区域、套餐、首选日期/时间、门店及中韩双语风格说明。</p></details>
+  <details><summary>这个页面会收集并保存我的后台数据吗？</summary><p>不会向外部后台提交数据。所有内容均在本地浏览器中处理，并通过 URL 链接直接共享。</p></details>
+  <details><summary>一天内可以安排多家不同门店吗？</summary><p>可以。系统会根据各项目预计时长与门店间路程给出时间提示；若不确定可选择“时间不限”。</p></details>
+  <details><summary>风格说明如何翻译给韩国门店？</summary><p>您在“想要的风格”中填写内容后，系统会自动生成韩文翻译并随同原文一起显示在摘要与共享链接中。</p></details>
+</main>
+<footer>© K-Beauty 美妆日 · 链接共享版 · 时长与路程均为参考值</footer>
+
+<script>
+// 品类、时长与门店数据（中文化展示）
+var cat = {color:"个人色彩诊断", hair:"发型设计", makeup:"妆容造型", photo:"证件照/写真"};
+var ORDER = ["color", "hair", "makeup", "photo"];
+var DUR = {
+  color:{min:90, txt:"约 1~1.5 小时"},
+  hair:{min:120, txt:"约 2 小时"},
+  makeup:{min:60, txt:"约 1 小时"},
+  photo:{min:90, txt:"约 1~1.5 小时"}
+};
+var stores = [
+  {n:"JUNO HAIR 准欧美发", c:"hair", area:"江南", la:37.5005, lo:127.0300},
+  {n:"朴胜哲美发工作室", c:"hair", area:"明洞", la:37.5640, lo:126.9840},
+  {n:"李安美发", c:"hair", area:"弘大", la:37.5575, lo:126.9245},
+  {n:"HIR 清潭", c:"makeup", area:"江南", la:37.5235, lo:127.0450},
+  {n:"弘大示例化妆室 A", c:"makeup", area:"弘大", la:37.5560, lo:126.9230},
+  {n:"明洞示例化妆室 B", c:"makeup", area:"明洞", la:37.5625, lo:126.9825},
+  {n:"我们小区照相馆", c:"photo", area:"钟路", la:37.5705, lo:126.9925},
+  {n:"Fork Studio", c:"photo", area:"梨大", la:37.5575, lo:126.9465},
+  {n:"Time On Me Studio", c:"photo", area:"弘大", la:37.5550, lo:126.9215},
+  {n:"Sihyunhada 照相馆", c:"photo", area:"圣水", la:37.5447, lo:127.0560},
+  {n:"明洞示例色彩馆 A", c:"color", area:"明洞", la:37.5632, lo:126.9850},
+  {n:"弘大示例色彩馆 B", c:"color", area:"弘大", la:37.5568, lo:126.9250}
+];
+var prods = [
+  {n:"美妆日全套套餐", pkg:1, hot:1, cats:["color","hair","makeup","photo"], desc:"个人色彩 + 发型 + 妆容 + 证件照"},
+  {n:"妆容 + 证件照套餐", pkg:1, cats:["makeup","photo"], desc:"韩系女团/氛围妆容 + 拍摄精修"},
+  {n:"发型 + 妆容套餐", pkg:1, cats:["hair","makeup"], desc:"一站式造型设计"},
+  {n:"证件照/写真", cats:["photo"], desc:"专业拍摄 + 1对1精修"},
+  {n:"妆容造型", cats:["makeup"], desc:"单项妆容服务"},
+  {n:"发型设计", cats:["hair"], desc:"单项目发型设计"},
+  {n:"个人色彩诊断", cats:["color"], desc:"单项目色彩诊断"}
+];
+
+var DEPOSIT = 10000;
+var $ = function(id){ return document.getElementById(id); };
+var WD = ["日","一","二","三","四","五","六"];
+var areas = [];
+stores.forEach(function(s){ if(areas.indexOf(s.area) < 0) areas.push(s.area); });
+
+// 仅保留首选1天日期（st.date）及对应时间（st.times）与自定义门店名（st.customStores）
+var st = {
+  region: null,
+  prod: -1,
+  chosen: {},
+  customStores: {},
+  date: "",
+  times: {},
+  step: 1,
+  memoKo: "",
+  shareCode: ""
+};
+var LABELS = ["地区","套餐","日期","门店","时间","信息","支付","分享"];
+
+// URL Hash (#s=...) 状态编码与解码（支持 UTF-8 中文/韩文）
+function encodeStateToHash(){
+  try {
+    var payload = {
+      r: st.region,
+      p: st.prod,
+      c: st.chosen,
+      cs: st.customStores,
+      d: st.date,
+      t: st.times,
+      s: st.step === 8 ? 6 : st.step,
+      ppl: $("ppl") ? $("ppl").value : "1",
+      nm: $("name") ? $("name").value.trim() : "",
+      wc: $("wechat") ? $("wechat").value.trim() : "",
+      em: $("email") ? $("email").value.trim() : "",
+      mz: $("memo") ? $("memo").value.trim() : "",
+      mk: st.memoKo || ""
+    };
+    var jsonStr = JSON.stringify(payload);
+    var utf8Bytes = new TextEncoder().encode(jsonStr);
+    var binStr = "";
+    for(var i = 0; i < utf8Bytes.length; i++){
+      binStr += String.fromCharCode(utf8Bytes[i]);
+    }
+    var b64 = btoa(binStr).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    var nextHash = "#s=" + b64;
+    if(window.location.hash !== nextHash){
+      window.history.replaceState(null, "", nextHash);
+    }
+    return window.location.origin + window.location.pathname + window.location.search + nextHash;
+  } catch (err) {
+    return window.location.href;
+  }
+}
+
+function decodeStateFromHash(){
+  try {
+    var h = window.location.hash || "";
+    if(h.indexOf("#s=") !== 0) return false;
+    var b64 = h.slice(3).replace(/-/g, "+").replace(/_/g, "/");
+    while(b64.length % 4) b64 += "=";
+    var binStr = atob(b64);
+    var bytes = new Uint8Array(binStr.length);
+    for(var i = 0; i < binStr.length; i++){
+      bytes[i] = binStr.charCodeAt(i);
+    }
+    var jsonStr = new TextDecoder().decode(bytes);
+    var p = JSON.parse(jsonStr);
+    if(!p || typeof p !== "object") return false;
+
+    st.region = p.r !== undefined ? p.r : null;
+    st.prod = typeof p.p === "number" ? p.p : -1;
+    st.chosen = (p.c && typeof p.c === "object") ? p.c : {};
+    st.customStores = (p.cs && typeof p.cs === "object") ? p.cs : {};
+    st.date = typeof p.d === "string" ? p.d : "";
+    st.times = (p.t && typeof p.t === "object") ? p.t : {};
+    st.step = (typeof p.s === "number" && p.s >= 1 && p.s <= 7) ? p.s : 1;
+
+    if($("ppl") && p.ppl) $("ppl").value = p.ppl;
+    if($("name") && typeof p.nm === "string") $("name").value = p.nm;
+    if($("wechat") && typeof p.wc === "string") $("wechat").value = p.wc;
+    if($("email") && typeof p.em === "string") $("email").value = p.em;
+    if($("memo") && typeof p.mz === "string"){
+      $("memo").value = p.mz;
+      st.memoKo = p.mk || (p.mz ? dictionaryTranslateToKorean(p.mz) : "");
+      $("memoKoPreview").textContent = st.memoKo || "尚未输入风格说明";
+    }
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
+function copyTextFallback(text, btnEl, defaultLabel, doneLabel){
+  var ta = document.createElement("textarea");
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand("copy");
+    if(btnEl){
+      btnEl.textContent = doneLabel;
+      setTimeout(function(){ btnEl.textContent = defaultLabel; }, 2000);
+    }
+  } catch(err) {
+    msg("复制失败，请手动复制链接。");
+  }
+  document.body.removeChild(ta);
+}
+
+// 主题切换
+$("themeBtn").onclick = function(){
+  var root = document.documentElement;
+  var cur = root.getAttribute("data-theme");
+  var isDark = cur === "dark" || (!cur && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  root.setAttribute("data-theme", isDark ? "light" : "dark");
+};
+
+// 日期与时间格式化工具
+function ymd(d){
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+function fd(k){
+  if(!k) return "未选择";
+  var p = k.split("-");
+  return k + " (周" + WD[new Date(+p[0], +p[1]-1, +p[2]).getDay()] + ")";
+}
+function tm(s){
+  var p = s.split(":");
+  return (+p[0]) * 60 + (+p[1]);
+}
+function ft(m){
+  return String(Math.floor(m/60)).padStart(2,"0") + ":" + String(m%60).padStart(2,"0");
+}
+function c30(m){
+  return Math.ceil(m/30) * 30;
+}
+function fdur(min){
+  var h = Math.floor(min/60), m = min%60;
+  if(!h) return "约 " + m + " 分钟";
+  return "约 " + h + " 小时" + (m ? " " + m + " 分钟" : "");
+}
+function needCats(){
+  if(st.prod < 0 || !prods[st.prod]) return [];
+  return ORDER.filter(function(c){ return prods[st.prod].cats.indexOf(c) >= 0; });
+}
+
+// 门店显示名称（优先使用用户填写的自定义门店名，否则使用选定门店）
+function sname(c){
+  var custom = (st.customStores[c] || "").trim();
+  var i = st.chosen[c];
+  var base = (i !== undefined && i >= 0 && stores[i]) ? (stores[i].n + " (" + stores[i].area + ")") : "";
+  if(custom && base) return custom + " [参考: " + base + "]";
+  if(custom) return custom + " (自定义)";
+  if(base) return base;
+  return "未填写";
+}
+
+function totalMin(cs){
+  var t = 0;
+  cs.forEach(function(c){ t += DUR[c].min; });
+  return t;
+}
+
+// 路程估算
+function hav(a, b){
+  var r = Math.PI / 180;
+  var dl = (b.la - a.la) * r;
+  var dn = (b.lo - a.lo) * r;
+  var x = Math.sin(dl/2)*Math.sin(dl/2) + Math.cos(a.la*r)*Math.cos(b.la*r)*Math.sin(dn/2)*Math.sin(dn/2);
+  return 2 * 6371 * Math.asin(Math.sqrt(x));
+}
+function trav(i, j){
+  var d = hav(stores[i], stores[j]) * 1.3;
+  return {
+    km: d.toFixed(1),
+    walk: Math.max(3, Math.round(d / 4.8 * 60 / 5) * 5),
+    taxi: Math.round(d / 22 * 60) + 5,
+    fare: Math.round((4800 + Math.max(0, d - 1.6) * 763) / 100) * 100
+  };
+}
+function travText(t){
+  return "步行约 " + t.walk + " 分钟" + (t.walk > 45 ? "(较远)" : "") + " · 打车约 " + t.taxi + " 分钟 · 约 " + t.km + " km · 车费约 ₩" + t.fare.toLocaleString();
+}
+function pair(a, b){
+  var i = st.chosen[a], j = st.chosen[b];
+  return (i >= 0 && j >= 0 && stores[i] && stores[j]) ? trav(i, j) : null;
+}
+function travelMin(a, b){
+  var t = pair(a, b);
+  return t ? t.taxi : 30;
+}
+function moveText(a, b){
+  var t = pair(a, b);
+  return t ? travText(t) : "请结合实际路程预留充足缓冲时间（默认按 30 分钟参考）";
+}
+
+function msg(t){
+  var e = $("err");
+  e.textContent = "⚠️ " + t;
+  e.style.display = "block";
+  $("book").scrollIntoView();
+}
+
+// 自动翻译（中文/自由文本 -> 韩语）：结合常用美妆词汇字典 + 可选 Gemini API 增强
+var KO_DICT = [
+  ["清透自然", "맑고 자연스러운"],
+  ["自然妆", "내추럴 메이크업"],
+  ["韩系妆容", "K-뷰티 메이크업"],
+  ["女团妆", "걸그룹 메이크업"],
+  ["氛围感", "분위기 있는"],
+  ["显白", "피부가 화사해 보이는"],
+  ["显气质", "분위기와 고급스러움이 살아나는"],
+  ["水光肌", "물광 피부 표현"],
+  ["伪素颜", "꾸안꾸 스타일"],
+  ["证件照", "증명사진"],
+  ["写真", "프로필/화보 촬영"],
+  ["锁骨发", "쇄골 기장 헤어"],
+  ["空气刘海", "에어뱅 앞머리"],
+  ["卷发", "웨이브 헤어"],
+  ["染发", "염색"],
+  ["个人色彩", "퍼스널컬러"],
+  ["暖色", "웜톤"],
+  ["冷色", "쿨톤"],
+  ["春季型", "봄 웜톤"],
+  ["夏季型", "여름 쿨톤"],
+  ["秋季型", "가을 웜톤"],
+  ["冬季型", "겨울 쿨톤"],
+  ["喜欢", "선호하는 스타일은"],
+  ["希望", "원하는 방향은"],
+  ["想要", "원하는 스타일은"],
+  ["参考", "참고 자료:"],
+  ["照片", "사진"],
+  ["明星", "연예인/셀럽"],
+  ["演员", "배우"]
+];
+
+function dictionaryTranslateToKorean(text){
+  var out = text.trim();
+  if(!out) return "";
+  KO_DICT.forEach(function(pair){
+    out = out.split(pair[0]).join(pair[1]);
+  });
+  return "[자동 번역] " + out;
+}
+
+var translateTimer = null;
+async function translateStyleToKorean(rawText){
+  var clean = (rawText || "").trim();
+  if(!clean){
+    st.memoKo = "";
+    $("memoKoPreview").textContent = "尚未输入风格说明";
+    return;
+  }
+  var fallbackKo = dictionaryTranslateToKorean(clean);
+  st.memoKo = fallbackKo;
+  $("memoKoPreview").textContent = fallbackKo + " (번역 중...)";
+
+  // 尝试调用 Gemini API 进行更自然的韩语翻译（无 API Key 时自动保留词典/规则结果）
+  try {
+    var apiKey = "";
+    var apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=" + apiKey;
+    var res = await fetch(apiUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        systemInstruction: {
+          parts: [{ text: "You are a professional Korean beauty translator. Translate the user's Chinese beauty/styling request into natural, polite Korean suitable for Korean hair, makeup, personal color, and photo studios. Output ONLY the Korean translation." }]
+        },
+        contents: [{ parts: [{ text: clean }] }]
+      })
+    });
+    if(res.ok){
+      var data = await res.json();
+      var aiText = data && data.candidates && data.candidates[0] &&
+        data.candidates[0].content && data.candidates[0].content.parts &&
+        data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
+      if(aiText && aiText.trim()){
+        st.memoKo = aiText.trim();
+        $("memoKoPreview").textContent = st.memoKo;
+        return;
+      }
+    }
+  } catch (e) {
+    // 网络或环境未配置密钥时静默使用本地词典翻译结果
+  }
+  $("memoKoPreview").textContent = st.memoKo;
+}
+
+$("memo").addEventListener("input", function(){
+  clearTimeout(translateTimer);
+  var val = $("memo").value;
+  translateTimer = setTimeout(function(){
+    translateStyleToKorean(val);
+  }, 250);
+});
+
+// 热门套餐卡片渲染
+var pk = $("pkgs");
+prods.forEach(function(p, i){
+  if(!p.pkg) return;
+  var d = document.createElement("div");
+  d.className = "card" + (p.hot ? " pk" : "");
+  d.innerHTML = p.cats.map(function(c){ return '<span class="tag">' + cat[c] + '</span>'; }).join("") +
+    (p.hot ? '<span class="tag">热门</span>' : "") +
+    '<h3>' + p.n + '</h3><ul><li>' + p.desc + '</li><li>预计时长 ' + fdur(totalMin(p.cats)) + '（不含路程）</li></ul>' +
+    '<button type="button" class="btn" data-p="' + i + '">选择此套餐预约</button>';
+  pk.appendChild(d);
+});
+pk.onclick = function(e){
+  var b = e.target.closest("button[data-p]");
+  if(!b) return;
+  var idx = +b.dataset.p;
+  if(st.prod !== idx){
+    st.chosen = {};
+    st.customStores = {};
+    st.times = {};
+  }
+  st.prod = idx;
+  show(st.region === null ? 1 : 2);
+};
+
+// 进度条
+function drawProg(){
+  $("prog").innerHTML = LABELS.map(function(l, i){
+    var n = i + 1;
+    var cls = n === st.step ? "on" : (n < st.step ? "ok" : "");
+    return '<span class="' + cls + '" data-jump="' + n + '">' + n + ' ' + l + '</span>';
+  }).join("");
+}
+$("prog").onclick = function(e){
+  var s = e.target.closest("span[data-jump]");
+  if(!s) return;
+  var target = +s.dataset.jump;
+  if(target < st.step && st.step < 8) show(target);
+};
+
+// ① 地区选择
+function drawRegs(){
+  var h = '';
+  areas.forEach(function(a){
+    var n = stores.filter(function(s){ return s.area === a; }).length;
+    h += '<button type="button" class="sc' + (st.region === a ? ' on' : '') + '" data-r="' + a + '"><b>首尔 ' + a + '</b><small>参考门店 ' + n + ' 家</small></button>';
+  });
+  h += '<button type="button" class="sc' + (st.region === "all" ? ' on' : '') + '" data-r="all"><b>不限区域</b><small>首尔各区均可</small></button>';
+  $("regs").innerHTML = h;
+}
+$("regs").onclick = function(e){
+  var b = e.target.closest("button[data-r]");
+  if(!b) return;
+  if(st.region !== b.dataset.r){
+    st.chosen = {};
+    st.times = {};
+  }
+  st.region = b.dataset.r;
+  drawRegs();
+};
+
+// ② 套餐/单品选择
+function prodCard(p, i){
+  return '<button type="button" class="sc' + (st.prod === i ? ' on' : '') + '" data-p="' + i + '">' +
+    p.cats.map(function(c){ return '<span class="tag">' + cat[c] + '</span>'; }).join("") +
+    '<b>' + p.n + '</b><small>' + p.desc + '</small><small>预计时长 ' + fdur(totalMin(p.cats)) + '（不含路程）</small></button>';
+}
+function drawProds(){
+  var a = '', b = '';
+  prods.forEach(function(p, i){
+    if(p.pkg) a += prodCard(p, i);
+    else b += prodCard(p, i);
+  });
+  $("prods").innerHTML = '<p class="hint"><b>套餐组合</b></p><div class="sgrid">' + a + '</div><p class="hint"><b>单项服务</b></p><div class="sgrid">' + b + '</div>';
+}
+$("prods").onclick = function(e){
+  var b = e.target.closest("button[data-p]");
+  if(!b) return;
+  var idx = +b.dataset.p;
+  if(st.prod !== idx){
+    st.chosen = {};
+    st.customStores = {};
+    st.times = {};
+  }
+  st.prod = idx;
+  drawProds();
+};
+
+// ③ 首选日期选择（仅选1天）
+var todayD = new Date();
+todayD.setHours(0,0,0,0);
+var today = ymd(todayD);
+var view = new Date(todayD.getFullYear(), todayD.getMonth(), 1);
+
+function drawCal(){
+  $("ym").textContent = view.getFullYear() + "年 " + (view.getMonth()+1) + "月";
+  var el = $("days");
+  el.innerHTML = "";
+  var first = view.getDay();
+  var last = new Date(view.getFullYear(), view.getMonth()+1, 0).getDate();
+  for(var i = 0; i < first; i++) el.appendChild(document.createElement("span"));
+  for(var d = 1; d <= last; d++){
+    var dt = new Date(view.getFullYear(), view.getMonth(), d);
+    var k = ymd(dt);
+    var isSel = st.date === k;
+    var b = document.createElement("button");
+    b.type = "button";
+    b.dataset.d = k;
+    b.className = "dy" + (isSel ? " sel" : "");
+    b.textContent = String(d);
+    if(dt < todayD) b.disabled = true;
+    el.appendChild(b);
+  }
+  $("prev").disabled = (view <= new Date(todayD.getFullYear(), todayD.getMonth(), 1));
+}
+function drawPicked(){
+  if(st.date){
+    $("picked").innerHTML = '<div class="pi"><span><b>首选日期</b> · ' + fd(st.date) + '</span><button type="button" id="clearDateBtn" aria-label="清除日期">✕</button></div>';
+  } else {
+    $("picked").innerHTML = '<div class="pi empty"><span><b>首选日期</b> · 请在上方日历点击选择 1 天（必填）</span></div>';
+  }
+}
+function drawDates(){
+  drawCal();
+  drawPicked();
+}
+$("days").onclick = function(e){
+  var b = e.target.closest("button[data-d]");
+  if(!b || b.disabled) return;
+  var k = b.dataset.d;
+  if(st.date === k){
+    st.date = "";
+    st.times = {};
+  } else {
+    st.date = k;
+  }
+  $("err").style.display = "none";
+  drawDates();
+};
+$("picked").onclick = function(e){
+  if(e.target.closest("#clearDateBtn")){
+    st.date = "";
+    st.times = {};
+    drawDates();
+  }
+};
+$("prev").onclick = function(){
+  view = new Date(view.getFullYear(), view.getMonth()-1, 1);
+  drawCal();
+};
+$("next").onclick = function(){
+  view = new Date(view.getFullYear(), view.getMonth()+1, 1);
+  drawCal();
+};
+
+// ④ 各品类门店选择（已删除“门店推荐请求/无关”，新增“自定义门店名称”输入框）
+function drawStoreSteps(){
+  var h = '', nums = ["①","②","③","④"], cs = needCats();
+  cs.forEach(function(c, k){
+    var all = [];
+    stores.forEach(function(s, i){ if(s.c === c) all.push(i); });
+    var inR = all.filter(function(i){ return st.region === "all" || stores[i].area === st.region; });
+    var fb = (inR.length === 0 && st.region !== "all");
+    var list = fb ? all : inR;
+
+    h += '<h3 class="sec">' + nums[k] + ' ' + cat[c] + ' <small style="font-weight:400;color:var(--muted)">· 预计 ' + DUR[c].txt + '</small></h3>';
+    if(fb) h += '<p class="hint">所选区域暂无该品类参考门店，已展示首尔其他区域参考门店，您也可直接填写心仪门店名称。</p>';
+    var prev = k > 0 ? cs[k-1] : null;
+    h += '<div class="sgrid">';
+    list.forEach(function(i){
+      var extra = '';
+      if(prev && st.chosen[prev] >= 0){
+        var t = trav(st.chosen[prev], i);
+        extra = '<small>距上一家' + cat[prev] + '：步行约 ' + t.walk + ' 分 · 打车约 ' + t.taxi + ' 分 (约 ' + t.km + ' km)</small>';
+      }
+      h += '<button type="button" class="sc' + (st.chosen[c] === i ? ' on' : '') + '" data-c="' + c + '" data-i="' + i + '"><b>' + stores[i].n + '</b><small>📍 首尔 ' + stores[i].area + '</small>' + extra + '</button>';
+    });
+    h += '</div>';
+    var curCustom = st.customStores[c] || "";
+    h += '<div class="custom-store-box"><label>✍️ 填写想去的' + cat[c] + '门店名称（可直接填写或补充）<input type="text" class="custom-store-input" data-c="' + c + '" value="' + curCustom.replace(/"/g, "&quot;") + '" placeholder="例如：XX清潭美妆 / 某小红书推荐门店"></label></div>';
+  });
+  $("storeSteps").innerHTML = h;
+}
+$("storeSteps").onclick = function(e){
+  var b = e.target.closest("button[data-c]");
+  if(!b) return;
+  st.chosen[b.dataset.c] = +b.dataset.i;
+  drawStoreSteps();
+};
+$("storeSteps").addEventListener("input", function(e){
+  var inp = e.target.closest(".custom-store-input");
+  if(!inp) return;
+  st.customStores[inp.dataset.c] = inp.value;
+});
+
+// ⑤ 首选日期时间安排（仅首选1天）
+function opts(v){
+  var h = '<option value="">请选择时间</option><option value="any"' + (v === "any" ? " selected" : "") + '>时间不限</option>';
+  for(var m = 600; m <= 1170; m += 30){
+    var t = ft(m);
+    h += '<option' + (v === t ? " selected" : "") + '>' + t + '</option>';
+  }
+  return h;
+}
+function conflict(k){
+  var cs = needCats();
+  if(k === 0) return "";
+  var a = cs[k-1], b = cs[k], pv = st.times[a], cv = st.times[b];
+  if(!pv || !cv || pv === "any" || cv === "any") return "";
+  var mv = travelMin(a, b);
+  var need = tm(pv) + DUR[a].min + mv;
+  if(tm(cv) < need){
+    return "⚠️ " + cat[a] + "预计 " + ft(tm(pv)+DUR[a].min) + " 结束，加上路程（约 " + mv + " 分钟）建议在 " + ft(c30(need)) + " 之后开始";
+  }
+  return "";
+}
+function drawTT(){
+  var cs = needCats();
+  var d = st.date;
+  var h = '<div class="tt"><div class="tthead"><b>首选日期 · ' + fd(d) + '</b><span class="ttb">' +
+    '<button type="button" class="mini" data-a="any">全部时间不限</button>' +
+    (cs.length > 1 ? '<button type="button" class="mini" data-a="auto">按首项时间自动排程</button>' : '') +
+    '</span></div>';
+  cs.forEach(function(c, k){
+    if(k > 0) h += '<div class="mv">↓ 路程参考：' + moveText(cs[k-1], c) + '</div>';
+    var v = st.times[c] || "";
+    h += '<div class="trow"><div><b>' + cat[c] + '</b> <small>' + sname(c) + '</small><br><small>预计 ' + DUR[c].txt + (v && v !== "any" ? ' · 预计 ' + v + ' ~ ' + ft(tm(v)+DUR[c].min) : '') + '</small></div><select data-c="' + c + '">' + opts(v) + '</select></div>';
+    var w = conflict(k);
+    if(w) h += '<div class="warnl">' + w + '</div>';
+  });
+  h += '</div>';
+  $("tt").innerHTML = h;
+}
+$("tt").onchange = function(e){
+  var s = e.target.closest("select[data-c]");
+  if(!s) return;
+  st.times[s.dataset.c] = s.value;
+  drawTT();
+};
+$("tt").onclick = function(e){
+  var b = e.target.closest("button[data-a]");
+  if(!b) return;
+  var cs = needCats(), a = b.dataset.a;
+  $("err").style.display = "none";
+  if(a === "any"){
+    cs.forEach(function(c){ st.times[c] = "any"; });
+  }
+  if(a === "auto"){
+    var f0 = st.times[cs[0]];
+    if(!f0){
+      msg("请先选择第一个项目的开始时间");
+      return;
+    }
+    if(f0 === "any"){
+      for(var k = 1; k < cs.length; k++) st.times[cs[k]] = "any";
+    } else {
+      var overflow = false;
+      for(var k = 1; k < cs.length; k++){
+        var pv = st.times[cs[k-1]];
+        if(!pv || pv === "any"){ st.times[cs[k]] = "any"; continue; }
+        var v = c30(tm(pv) + DUR[cs[k-1]].min + travelMin(cs[k-1], cs[k]));
+        if(v > 1170){
+          st.times[cs[k]] = "any";
+          overflow = true;
+        } else {
+          st.times[cs[k]] = ft(v);
+        }
+      }
+      if(overflow) msg("超过 19:30 的后续时段已自动设为“时间不限”。");
+    }
+  }
+  drawTT();
+};
+
+// 摘要渲染
+function sumHtml(withTot){
+  var cs = needCats();
+  var v = function(id){ return $(id) && $(id).value ? $(id).value.trim() : ""; };
+  var prodName = (st.prod >= 0 && prods[st.prod]) ? prods[st.prod].n : "未选择";
+  var regText = st.region === "all" ? "不限区域" : (st.region ? "首尔 " + st.region : "未选择");
+  var h = '<div><span>地区</span><span>' + regText + '</span></div><div><span>套餐/项目</span><span>' + prodName + '</span></div>';
+  h += '<div><span>首选日期</span><span>' + fd(st.date) + '</span></div>';
+  cs.forEach(function(c){
+    var tVal = st.times[c] === "any" ? "时间不限" : (st.times[c] || "未选择");
+    h += '<div><span>' + cat[c] + '</span><span style="text-align:right">' + sname(c) + ' · ' + tVal + '</span></div>';
+  });
+  h += '<div><span>人数</span><span>' + (v("ppl") || "1") + ' 人</span></div>';
+  if(v("memo")){
+    h += '<div><span>风格原文</span><span style="text-align:right;max-width:65%">' + v("memo") + '</span></div>';
+    h += '<div><span>韩语翻译</span><span style="text-align:right;max-width:65%;color:var(--pri)">' + (st.memoKo || dictionaryTranslateToKorean(v("memo"))) + '</span></div>';
+  }
+  if(withTot) h += '<div class="tot"><span>参考定金</span><span>₩' + DEPOSIT.toLocaleString() + '</span></div>';
+  return h;
+}
+
+function buildCopyText(){
+  var cs = needCats();
+  var v = function(id){ return $(id) && $(id).value ? $(id).value.trim() : ""; };
+  var lines = [
+    "[K-Beauty 美妆日预约申请单]",
+    "预约编号: " + $("code").textContent,
+    "地区: " + (st.region === "all" ? "不限区域" : "首尔 " + st.region),
+    "套餐/项目: " + ((st.prod >= 0 && prods[st.prod]) ? prods[st.prod].n : "未选择"),
+    "首选日期: " + fd(st.date),
+    "人数: " + (v("ppl") || "1") + " 人",
+    "申请人: " + v("name") + " (WeChat: " + v("wechat") + " / Email: " + v("email") + ")"
+  ];
+  cs.forEach(function(c){
+    var tVal = st.times[c] === "any" ? "时间不限" : (st.times[c] || "未选择");
+    lines.push("- " + cat[c] + ": " + sname(c) + " @ " + tVal);
+  });
+  if(v("memo")){
+    lines.push("风格需求(中): " + v("memo"));
+    lines.push("风格需求(韩): " + (st.memoKo || dictionaryTranslateToKorean(v("memo"))));
+  }
+  return lines.join("\n");
+}
+
+// 持久化保存至 localStorage（供 admin.html 读取）
+function saveSubmissionToStorage(codeStr, paid){
+  var cs = needCats();
+  var v = function(id){ return $(id) && $(id).value ? $(id).value.trim() : ""; };
+  var rawMemo = v("memo");
+  var koMemo = rawMemo ? (st.memoKo || dictionaryTranslateToKorean(rawMemo)) : "";
+  var pmEl = document.querySelector('input[name="pm"]:checked');
+
+  var storeDetails = {};
+  var timeDetails = {};
+  cs.forEach(function(c){
+    storeDetails[cat[c]] = sname(c);
+    timeDetails[cat[c]] = st.times[c] === "any" ? "时间不限" : (st.times[c] || "");
+  });
+
+  var record = {
+    id: codeStr,
+    submittedAt: new Date().toLocaleString("zh-CN"),
+    region: st.region === "all" ? "不限区域" : ("首尔 " + (st.region || "")),
+    product: (st.prod >= 0 && prods[st.prod]) ? prods[st.prod].n : "",
+    preferredDate: st.date,
+    stores: storeDetails,
+    times: timeDetails,
+    people: v("ppl") || "1",
+    name: v("name"),
+    wechat: v("wechat"),
+    email: v("email"),
+    styleZh: rawMemo,
+    styleKo: koMemo,
+    paymentMode: paid ? (pmEl ? pmEl.value : "Demo Paid") : "仅提交申请(未支付)",
+    status: "待确认"
+  };
+
+  st.lastSubmission = record;
+  try {
+    var existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    if(!Array.isArray(existing)) existing = [];
+    existing.unshift(record);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+  } catch (err) {
+    // 若浏览器禁用 localStorage 则仍可导出 JSON
+  }
+}
+
+// 步骤切换与表单校验
+function show(n, quiet){
+  st.step = n;
+  $("err").style.display = "none";
+  document.querySelectorAll(".sp").forEach(function(p){
+    p.style.display = (+p.dataset.s === n) ? "block" : "none";
+  });
+  if(n === 1) drawRegs();
+  if(n === 2) drawProds();
+  if(n === 3) drawDates();
+  if(n === 4) drawStoreSteps();
+  if(n === 5) drawTT();
+  if(n === 6 && $("memo").value.trim()) translateStyleToKorean($("memo").value);
+  if(n === 7) $("paySum").innerHTML = sumHtml(true);
+  encodeStateToHash();
+  drawProg();
+  if(!quiet) $("book").scrollIntoView();
+}
+
+function check(from){
+  var cs = st.prod >= 0 ? needCats() : [];
+  if(from === 1 && st.region === null){
+    msg("请选择希望体验的区域（不确定可选择“不限区域”）");
+    return false;
+  }
+  if(from === 2 && (st.prod < 0 || cs.length === 0)){
+    msg("请选择套餐或单项服务");
+    return false;
+  }
+  if(from === 3 && !st.date){
+    msg("请在日历中选择 1 个首选预约日期");
+    return false;
+  }
+  if(from === 4){
+    var miss = cs.filter(function(c){
+      var hasPick = st.chosen[c] !== undefined && st.chosen[c] >= 0;
+      var hasCustom = Boolean((st.customStores[c] || "").trim());
+      return !hasPick && !hasCustom;
+    });
+    if(miss.length){
+      msg("请选择或填写“" + cat[miss[0]] + "”的门店名称");
+      return false;
+    }
+  }
+  if(from === 5){
+    for(var k = 0; k < cs.length; k++){
+      if(!st.times[cs[k]]){
+        msg("请选择“" + cat[cs[k]] + "”的时间（不确定可选择“时间不限”）");
+        return false;
+      }
+      var w = conflict(k);
+      if(w){
+        msg(w.replace("⚠️ ", ""));
+        return false;
+      }
+    }
+  }
+  if(from === 6){
+    var v = function(id){ return $(id).value.trim(); };
+    if(!v("name") || !v("wechat") || !v("email")){
+      msg("请完整填写姓名、微信号和电子邮箱");
+      return false;
+    }
+    if(!$("agree").checked){
+      msg("请勾选同意收集并使用个人信息");
+      return false;
+    }
+    if(v("memo") && !st.memoKo){
+      st.memoKo = dictionaryTranslateToKorean(v("memo"));
+    }
+  }
+  return true;
+}
+
+document.querySelectorAll("button[data-go]").forEach(function(b){
+  b.onclick = function(){
+    var to = +b.dataset.go;
+    if(to > st.step && !check(st.step)) return;
+    show(to);
+  };
+});
+
+document.querySelectorAll(".pm").forEach(function(l){
+  l.onclick = function(){
+    document.querySelectorAll(".pm").forEach(function(x){ x.classList.remove("on"); });
+    l.classList.add("on");
+    l.querySelector("input").checked = true;
+  };
+});
+
+function finish(paid){
+  var codeStr = st.shareCode || ("KB-" + today.replace(/-/g,"").slice(2) + "-" + Math.floor(1000 + Math.random() * 9000));
+  st.shareCode = codeStr;
+  $("code").textContent = codeStr;
+  var shareUrl = encodeStateToHash();
+  $("shareUrlInput").value = shareUrl;
+  $("doneSum").innerHTML = sumHtml(false);
+  $("doneTitle").textContent = paid ? "✓ 共享链接与支付演示已生成" : "✓ 共享链接已生成";
+  $("doneNote").textContent = paid ? "※ 当前为演示模式，未产生真实扣款；任何打开下方链接的人都可查看当前配置。" : "无需后端保存，复制下方链接即可直接分享当前填写内容。";
+  show(8);
+}
+
+$("payBtn").onclick = function(){
+  if(!$("agree2").checked){
+    msg("请先勾选同意预约与退款相关说明");
+    return;
+  }
+  finish(true);
+};
+$("skipPay").onclick = function(){ finish(false); };
+
+$("topShareBtn").onclick = function(){
+  var url = encodeStateToHash();
+  if($("shareUrlInput")) $("shareUrlInput").value = url;
+  copyTextFallback(url, $("topShareBtn"), "复制当前链接", "✓ 已复制链接");
+};
+
+$("copyShareBtn").onclick = function(){
+  var url = encodeStateToHash();
+  $("shareUrlInput").value = url;
+  copyTextFallback(url, $("copyShareBtn"), "复制共享链接", "✓ 链接已复制");
+};
+
+$("copyBtn").onclick = function(){
+  copyTextFallback(buildCopyText(), $("copyBtn"), "复制预约摘要", "✓ 已复制");
+};
+
+$("again").onclick = function(){
+  st = {region:null, prod:-1, chosen:{}, customStores:{}, date:"", times:{}, step:1, memoKo:"", shareCode:""};
+  $("name").value = "";
+  $("wechat").value = "";
+  $("email").value = "";
+  $("memo").value = "";
+  $("memoKoPreview").textContent = "尚未输入风格说明";
+  $("agree").checked = false;
+  $("agree2").checked = false;
+  window.history.replaceState(null, "", window.location.pathname + window.location.search);
+  show(1);
+};
+
+window.addEventListener("hashchange", function(){
+  if(decodeStateFromHash()){
+    show(st.step, true);
+  }
+});
+
+// 初始化：若 URL 包含 #s=... 则自动还原共享状态
+var restored = decodeStateFromHash();
+show(restored ? st.step : 1, true);
+</script>
+</body>
+</html>
